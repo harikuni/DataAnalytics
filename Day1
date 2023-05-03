@@ -1,0 +1,43 @@
+######## Problem1 ----->  LinkedIn SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/matching-skills
+
+Given a table of candidates and their skills, you're tasked with finding the candidates best suited for an open Data Science job. You want to find candidates who are proficient in Python, Tableau, and PostgreSQL.
+
+Write a query to list the candidates who possess all of the required skills for the job. Sort the output by candidate ID in ascending order.
+
+
+SELECT candidate_id 
+from candidates
+where skill in  ('Python','Tableau','PostgreSQL') 
+group by candidate_id
+having count(skill) = 3
+order by candidate_id;
+
+
+######### Problem2 ---->  Facebook SQL Interview Question #####################################
+link ----> https://datalemur.com/questions/sql-page-with-no-likes
+
+Assume you're given the tables below about Facebook Page and Page likes (as in "Like a Facebook Page").
+
+Write a query to return the IDs of the Facebook pages which do not possess any likes. The output should be sorted in ascending order.
+
+
+SELECT p.page_id 
+from pages p
+left join page_likes pl on p.page_id = pl.page_id
+where pl.liked_date is NULL
+order by page_id ;
+
+
+######### Problem2 ---->   Tesla SQL Interview Question #####################################
+link ----> https://datalemur.com/questions/tesla-unfinished-parts
+
+Tesla is investigating production bottlenecks and they need your help to extract the relevant data. Write a query that determines which parts with the assembly steps have initiated the assembly process but remain unfinished.
+
+
+SELECT part,assembly_step 
+from parts_assembly
+where finish_date is NULL;
+
+
+
