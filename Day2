@@ -1,0 +1,63 @@
+
+
+
+######## Problem1 -----> Twitter SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/sql-histogram-tweets
+
+Q. Assume you're given a table Twitter tweet data, write a query to obtain a histogram of tweets posted per user in 2022. Output the tweet count per user as the bucket and the number of Twitter users who fall into that bucket.
+
+with total_tweets as 
+(
+SELECT user_id, count(msg) as twt_count from tweets
+where tweet_date >= '2022-01-01' and 
+      tweet_date <= '2022-12-31'
+      
+group by user_id
+)
+
+select twt_count as tweet_bucket,
+count(user_id) as users_num
+from total_tweets
+group by twt_count;
+
+
+######## Problem2 -----> New York Times SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/laptop-mobile-viewership
+
+Assume you're given the table on user viewership categorised by device type where the three types are laptop, tablet, and phone.
+
+Q. Write a query that calculates the total viewership for laptops and mobile devices where mobile is defined as the sum of tablet and phone viewership. Output the total viewership for laptops as laptop_reviews and the total viewership for mobile devices as mobile_views.
+
+--- 1st approach --------------
+SELECT 
+sum(case when device_type = 'laptop' then 1 else 0 end) as laptop_views,
+sum(case when device_type in ('phone','tablet') then 1 else 0 end) as mobile_views
+from viewership 
+
+---------- 2nd approach ------------
+SELECT  
+count(*) FILTER (where device_type = 'laptop') as laptop_views,
+count(*) FILTER (where device_type in ('phone','tablet')) as mobile_views
+from viewership 
+
+
+
+######## Problem3 -----> Linkedin SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/duplicate-job-listings
+
+Q. assume you are given the table below that shows job postings for all companies on the LinkedIn platform. Write a query to get the number of companies that have posted duplicate job listings.
+
+
+with grouped_table as (
+select company_id,title,description,count(job_id) as job_count
+from job_listings
+group by company_id,title,description
+)
+
+select count(distinct company_id) as duplicate from grouped_table
+where job_count >1;
+
+
+
+
+
