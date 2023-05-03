@@ -1,0 +1,77 @@
+
+
+######## Problem1 -----> Facebook SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/sql-average-post-hiatus-1
+
+
+Q. Given a table of Facebook posts, for each user who posted at least twice in 2021, write a query to find the number of days between each user’s first post of the year and last post of the year in the year 2021. Output the user and number of the days between each user's first and last post.
+
+SELECT user_id,
+max(post_date::DATE) - min(post_date::DATE) AS day_btw from posts
+where DATE_PART('year',post_date::DATE) = 2021
+group by user_id
+having count(post_id) >1;
+
+
+
+######## Problem2 -----> Microsoft SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/teams-power-users
+
+Q. Write a query to identify the top 2 Power Users who sent the highest number of messages on Microsoft Teams in August 2022. Display the IDs of these 2 users along with the total number of messages they sent. Output the results in descending order based on the count of the messages.
+
+SELECT sender_id,count(sent_date) as total_msg
+from messages
+where EXTRACT(MONTH from sent_date) = '8' 
+  AND EXTRACT(YEAR from sent_date) = '2022'
+      
+group by sender_id
+order by total_msg desc 
+limit 2
+
+
+
+######## Problem3 -----> Robinhood SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/completed-trades
+
+
+Q. Assume you're given the tables containing completed trade orders and user details in a Robinhood trading system.
+
+Write a query to retrieve the top three cities that have the highest number of completed trade orders listed in descending order. Output the city name and the corresponding number of completed trade orders.
+
+
+SELECT u.city,count(order_id) as completed from users u
+left join trades t on u.user_id = t.user_id
+where status = 'Completed'
+group by u.city
+order by completed desc 
+limit 3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
