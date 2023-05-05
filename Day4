@@ -1,0 +1,87 @@
+######## Problem1 ----->  Amazon SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/sql-avg-review-ratings
+
+Q. Given the reviews table, write a query to retrieve the average star rating for each product, grouped by month. The output should display the month as a numerical value, product ID, and average star rating rounded to two decimal places. Sort the output first by month and then by product ID.
+
+SELECT 
+EXTRACT(MONTH FROM submit_date) AS mth,
+product_id,
+round(avg(stars),2) as avg_ratings 
+from reviews
+group by EXTRACT(MONTH FROM submit_date), product_id
+order by mth,product_id
+
+
+
+######## Problem2 ----->  Facebook SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/click-through-rate
+
+Q. Assume you have an events table on Facebook app analytics. Write a query to calculate the click-through rate (CTR) for the app in 2022 and round the results to 2 decimal places.
+
+
+Approach 1 ----->  ( Using CTE )
+
+with totals as (
+select app_id,
+count(case when event_type = 'impression' then 1 else NULL end) as t_imp,
+count(case when event_type = 'click' then 1 else NULL end) as t_clk
+
+from events
+where EXTRACT(YEAR FROM timestamp) = '2022'
+group by app_id
+)
+
+select app_id,round(100.0*t_clk/t_imp,2) from totals
+
+
+
+Approach 2 -------->  (Without CTE)
+
+select app_id,
+
+round(100.0*
+   count(case when event_type = 'click' then 1 else NULL end)/
+   count(case when event_type = 'impression' then 1 else NULL end),2)
+   as CTR
+
+from events
+where EXTRACT(YEAR FROM timestamp) = '2022'
+group by app_id;
+
+
+
+######## Problem3 ----->  TikTok SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/second-day-confirmation
+
+Q. Assume you're given tables with information about TikTok user sign-ups and confirmations through email and text. New users on TikTok sign up using their email addresses, and upon sign-up, each user receives a text message confirmation to activate their account.
+
+Write a query to display the user IDs of those who did not confirm their sign-up on the first day, but confirmed on the second day.
+
+
+SELECT e.user_id from emails e
+join texts t on e.email_id = t.email_id
+where t.action_date = e.signup_date + interval '1 day'
+and t.signup_action = 'Confirmed';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
