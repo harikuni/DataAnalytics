@@ -1,0 +1,53 @@
+
+
+######## Problem1 ----->  JPMorgan Chase SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/cards-issued-difference
+
+Q Your team at JPMorgan Chase is soon launching a new credit card, and to gain some context, you are analyzing how many credit cards were issued each month.
+
+Write a query that outputs the name of each credit card and the difference in issued amount between the month with the most cards issued, and the least cards issued. Order the results according to the biggest difference.
+
+SELECT card_name,max(issued_amount) - min(issued_amount) as diff
+from monthly_cards_issued
+group by 1
+order by 2 desc;
+
+
+
+######## Problem2 ----->  Alibaba SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/alibaba-compressed-mean
+
+Q You're trying to find the mean number of items per order on Alibaba, rounded to 1 decimal place using tables which includes information on the count of items in each order (item_count table) and the corresponding number of orders for each item count (order_occurrences table).
+
+SELECT ROUND(
+       sum(item_count::Decimal*order_occurrences)/
+       sum(order_occurrences),1) as mean
+from items_per_order;
+
+######## Problem3 ----->  CVS Health SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/top-profitable-drugs
+
+Q CVS Health is trying to better understand its pharmacy sales, and how well different products are selling. Each drug can only be produced by one manufacturer.
+
+Write a query to find the top 3 most profitable drugs sold, and how much profit they made. Assume that there are no ties in the profits. Display the result from the highest to the lowest total profit.
+
+
+SELECT drug,total_sales-cogs as profit
+from pharmacy_sales
+order by profit desc
+limit 3;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
