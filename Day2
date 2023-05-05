@@ -58,6 +58,6 @@ select count(distinct company_id) as duplicate from grouped_table
 where job_count >1;
 
 
-
+--------- ---------------------------------------------------------------------------------------------------------------------------
 
 
