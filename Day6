@@ -1,0 +1,68 @@
+
+######## Problem1 ----->  CVS Health SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/non-profitable-drugs
+
+Q. CVS Health is analyzing its pharmacy sales data, and how well different products are selling in the market. Each drug is exclusively manufactured by a single manufacturer.
+Write a query to identify the manufacturers associated with the drugs that resulted in losses for CVS Health and calculate the total amount of losses incurred.
+Output the manufacturer's name, the number of drugs associated with losses, and the total losses in absolute value. Display the results sorted in descending order with the highest losses displayed at the top.
+
+
+SELECT manufacturer,
+count(drug) as drug_cnt,
+abs(sum(total_sales - cogs)) as t_loss
+from pharmacy_sales 
+where total_sales - cogs <=0
+group by 1
+order by 3 desc;
+
+
+
+
+######## Problem2 ----->  CVS Health SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/total-drugs-sales
+
+Q. CVS Health is trying to better understand its pharmacy sales, and how well different products are selling.
+Write a query to find the total drug sales for each manufacturer. Round your answer to the closest million, and report your results in descending order of total sales.
+
+SELECT manufacturer,
+CONCAT('$' ,round(sum(total_sales)/1000000),' million') as sales
+from pharmacy_sales 
+GROUP BY 1
+order by sum(total_sales) DESC;
+
+
+######## Problem3 ----->  UnitedHealth SQL Interview Question ###################################
+link -----> https://datalemur.com/questions/frequent-callers
+
+
+
+Q. UnitedHealth has a program called Advocate4Me, which allows members to call an advocate and receive support for their health care needs – whether that's behavioural, clinical, well-being, health care financing, benefits, claims or pharmacy help.
+Write a query to find how many UHG members made 3 or more calls. case_id column uniquely identifies each call made.
+
+
+with call_records as (
+SELECT 
+policy_holder_id,
+count(case_id) as call_counts 
+from callers
+group by policy_holder_id
+having count(case_id) >= 3
+)
+
+select count(policy_holder_id) as member_count 
+from call_records;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
