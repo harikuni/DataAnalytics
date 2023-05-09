@@ -21,3 +21,72 @@ link -----> https://datalemur.com/questions/sql-third-transaction
 
 
 Q. Assume you are given the table below on Uber transactions made by users. Write a query to obtain the third transaction of every user. Output the user id, spend and transaction date.
+
+with trans as(
+select user_id,
+spend,
+transaction_date,
+ROW_NUMBER() OVER(
+PARTITION BY user_id ORDER BY transaction_date) as row_num
+from transactions
+)
+
+select user_id,
+spend,
+transaction_date 
+from trans
+where row_num = 3;
+
+
+
+######## Problem3 ----->  Sending vs. Opening Snaps [Snapchat SQL Interview Question] ###################################
+link -----> https://datalemur.com/questions/time-spent-snaps
+
+Q. Assume you're given tables with information on Snapchat users, including their ages and time spent sending and opening snaps.
+
+Write a query to obtain a breakdown of the time spent sending vs. opening snaps as a percentage of total time spent on these activities grouped by age group. Round the percentage to 2 decimal places in the output.
+
+
+with grouped as (
+SELECT age.age_bucket,
+sum(case when activity_type = 'open' then time_spent else 0 end) as o_time,
+sum(case when activity_type = 'send' then time_spent else 0 end) as s_time,
+sum(a.time_spent) as total_timespent
+from activities a
+join age_breakdown age on a.user_id = age.user_id
+where a.activity_type = 'send' or a.activity_type = 'open'
+group by age.age_bucket
+)
+
+select age_bucket,
+round(100.0*s_time/(s_time+o_time),2) as send_perc,
+round(100.0*o_time/(s_time+o_time),2) as open_perc
+from grouped;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
