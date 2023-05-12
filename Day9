@@ -1,0 +1,103 @@
+######## Problem1 ----->  Signup Activation Rate [TikTok SQL Interview Question] ###################################
+link --> https://datalemur.com/questions/signup-confirmation-rate
+
+Q. New TikTok users sign up with their emails. They confirmed their signup by replying to the text confirmation to activate their accounts. Users may receive multiple text messages for account confirmation until they have confirmed their new account.
+A senior analyst is interested to know the activation rate of specified users in the emails table. Write a query to find the activation rate. Round the percentage to 2 decimal places.
+
+select 
+Round(count(t.email_id)::decimal/count(distinct e.email_id),2) 
+as activation_rate
+from emails e
+left join texts t 
+on e.email_id = t.email_id and t.signup_action = 'Confirmed'
+
+######## Problem2 ----->  Supercloud Customer [Microsoft SQL Interview Question] ###################################
+link --> https://datalemur.com/questions/supercloud-customer 
+
+Q. A Microsoft Azure Supercloud customer is a company which buys at least 1 product from each product category.
+Write a query to report the company ID which is a Supercloud customer.
+
+solution --1
+
+with supercloud as(
+SELECT 
+c.customer_id,count(distinct p.product_category) as unique_count 
+from customer_contracts c 
+inner join products p on c.product_id = p.product_id
+group by 1
+)
+
+select customer_id from supercloud
+where unique_count = (
+      select count(DISTINCT product_category) 
+      from products)
+      
+order by 1
+ 
+solution --2
+ 
+SELECT 
+c.customer_id,count(distinct p.product_category) as unique_count 
+from customer_contracts c 
+inner join products p on c.product_id = p.product_id
+
+group by c.customer_id
+having count(distinct p.product_category) = 3
+
+
+
+######## Problem3 ----->  Odd and Even Measurements [Google SQL Interview Question] ###################################
+link --> https://datalemur.com/questions/odd-even-measurements
+
+Q. Assume you're given a table with measurement values obtained from a Google sensor over multiple days with measurements taken multiple times within each day.
+Write a query to calculate the sum of odd-numbered and even-numbered measurements separately for a particular day and display the results in two different columns. Refer to the Example Output below for the desired format.
+
+solution 1: ( Using CASE )
+
+with final as (
+SELECT 
+CAST(measurement_time as DATE) as measurement_day,measurement_value,
+ROW_NUMBER() OVER(
+PARTITION BY CAST(measurement_time as DATE)
+ORDER BY measurement_time
+) AS measurement_num
+from measurements 
+)
+
+select measurement_day,
+sum(case 
+when mod(measurement_num,2) !=0 then measurement_value else 0 end)as odd_sum,
+sum(case 
+when mod(measurement_num,2) =0 then measurement_value else 0 end)as even_sum
+from final
+GROUP BY measurement_day
+
+
+solution 2: ( using FILTER )
+
+with final as (
+SELECT 
+CAST(measurement_time as DATE) as measurement_day,measurement_value,
+ROW_NUMBER() OVER(
+PARTITION BY CAST(measurement_time as DATE)
+ORDER BY measurement_time
+) AS measurement_num
+from measurements 
+)
+
+select measurement_day,
+sum(measurement_value) FILTER(WHERE measurement_num %2!= 0) as odd_sum,
+sum(measurement_value) FILTER(WHERE measurement_num %2 = 0) as even_sum
+from final
+GROUP BY measurement_day
+
+
+
+
+
+
+
+
+
+
+
