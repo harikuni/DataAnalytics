@@ -1,0 +1,100 @@
+######## Problem1 ----->  Histogram of Users and Purchases [Walmart SQL Interview Question] ###################################
+link -->> https://datalemur.com/questions/histogram-users-purchases
+
+Q. Assume you are given the table on Walmart user transactions. Based on a user's most recent transaction date, write a query to obtain the users and the number of products bought.
+Output the user's most recent transaction date, user ID and the number of products sorted by the transaction date in chronological order.
+
+with ranked as(
+SELECT 
+transaction_date,
+user_id,
+product_id,
+RANK() OVER(
+PARTITION BY user_id
+order by transaction_date desc) as days_rank
+from user_transactions 
+)
+
+select transaction_date,user_id,
+count(product_id) as purchase_count
+from ranked
+where days_rank = 1
+group by 1,2
+order by 1;
+
+
+
+######## Problem2  ----->  Compressed Mode [Alibaba SQL Interview Question] ###################################
+link -->> https://datalemur.com/questions/alibaba-compressed-mode
+
+Q. Given a table containing the item count for each order and the frequency of orders with that item count, write a query to determine the mode of the number of items purchased per order on Alibaba. If there are several item counts with the same frequency, you should sort them in ascending order.
+
+
+SELECT item_count
+from items_per_order 
+where order_occurrences = 
+     (select max(order_occurrences) FROM items_per_order);
+     
+     
+     
+
+######## Problem3  ----->  Card Launch Success [JPMorgan Chase SQL Interview Question] ###################################
+link -->> https://datalemur.com/questions/card-launch-success
+
+Q. Your team at JPMorgan Chase is soon launching a new credit card. You are asked to estimate how many cards you'll issue in the first month.
+Before you can answer this question, you want to first get some perspective on how well new credit card launches typically do in their first month.
+Write a query that outputs the name of the credit card, and how many cards were issued in its launch month. The launch month is the earliest record in the monthly_cards_issued table for a given card. Order the results starting from the biggest issued amount.
+
+
+
+with card_launch as (
+select card_name,
+issued_amount,
+MAKE_DATE(issue_year,issue_month,1) as issue_date,
+min(MAKE_DATE(issue_year,issue_month,1)) OVER(
+partition by card_name) as launch_date
+from monthly_cards_issued
+)
+
+select card_name,issued_amount
+from card_launch
+where issue_date = launch_date
+order by issued_amount desc;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
