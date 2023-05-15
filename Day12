@@ -1,2 +1,5 @@
-######## Problem1 ----->  LinkedIn SQL Interview Question ###################################
-link ----->
+######## Problem1 -----> Maximize Prime Item Inventory [Amazon SQL Interview Question] ###################################
+link -----> https://datalemur.com/questions/prime-warehouse-storage
+
+Q. Amazon wants to maximize the number of items it can stock in a 500,000 square feet warehouse. It wants to stock as many prime items as possible, and afterwards use the remaining square footage to stock the most number of non-prime items.
+Write a query to find the number of prime and non-prime items that can be stored in the 500,000 square feet warehouse. Output the item type with prime_eligible followed by not_prime and the maximum number of items that can be stocked.
