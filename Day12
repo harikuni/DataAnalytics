@@ -47,57 +47,18 @@ However, at Google scale, querying the 2 trillion searches is too costly. Luckil
 Write a query to report the median of searches made by a user. Round the median to one decimal point.
 
 
+with searches_exp as (
+ SELECT searches
+  FROM search_frequency
+  GROUP BY 
+    searches,
+     GENERATE_SERIES(1, num_users))
+   
+   
+select ROUND(PERCENTILE_CONT(0.50) WITHIN GROUP (
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ORDER BY searches)::DECIMAL,1) as median
+from searches_exp
 
 
 
