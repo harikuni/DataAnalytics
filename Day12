@@ -4,6 +4,89 @@ link -----> https://datalemur.com/questions/prime-warehouse-storage
 Q. Amazon wants to maximize the number of items it can stock in a 500,000 square feet warehouse. It wants to stock as many prime items as possible, and afterwards use the remaining square footage to stock the most number of non-prime items.
 Write a query to find the number of prime and non-prime items that can be stored in the 500,000 square feet warehouse. Output the item type with prime_eligible followed by not_prime and the maximum number of items that can be stocked.
 
+with summary as (
+SELECT item_type,sum(square_footage) as total_sqft,
+count(item_type) as item_count
+from inventory 
+group by 1
+),
+
+
+prime_occupied_area as(
+select 
+item_type,
+total_sqft,
+FLOOR(500000/total_sqft) as prime_item_combined_count,
+(FLOOR(500000/total_sqft)*item_count) as prime_item_count
+from summary
+where item_type = 'prime_eligible'
+)
+
+select item_type,
+case 
+when item_type = 'prime_eligible'
+then (FLOOR(500000/total_sqft)*item_count)
+when item_type = 'not_prime'
+then FLOOR((500000 - 
+(SELECT FLOOR(500000/total_sqft)*total_sqft from prime_occupied_area))
+ / total_sqft) * item_count
+ 
+ end as item_count
+ 
+ from summary
+ 
+ order by 1 desc;
+
+
+
+######## Problem2 ----->Median Google Search Frequency [Google SQL Interview Question] ###################################
+link --> https://datalemur.com/questions/median-search-freq
+
+Q. Google's marketing team is making a Superbowl commercial and needs a simple statistic to put on their TV ad: the median number of searches a person made last year.
+However, at Google scale, querying the 2 trillion searches is too costly. Luckily, you have access to the summary table which tells you the number of searches made last year and how many Google users fall into that bucket.
+Write a query to report the median of searches made by a user. Round the median to one decimal point.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
