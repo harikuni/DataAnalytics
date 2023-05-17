@@ -1,0 +1,45 @@
+######## Problem1 ----->  Advertiser Status [Facebook SQL Interview Question] ###################################
+link -----> https://datalemur.com/questions/updated-status
+
+Q. Write a query to update the Facebook advertiser's status using the daily_pay table. Advertiser is a two-column table containing the user id and their payment status based on the last payment and daily_pay table has current information about their payment. Only advertisers who paid will show up in this table.
+
+
+with payment_status as (
+
+select a.user_id ,a.status,d.paid
+from advertiser a
+left join daily_pay d 
+on a.user_id = d.user_id
+
+UNION
+
+select d.user_id ,a.status,d.paid
+from daily_pay d 
+left join advertiser a
+on d.user_id = a.user_id
+)
+
+select 
+user_id,
+case when paid is NULL then 'CHURN'
+WHEN status != 'CHURN' AND paid IS NOT NULL THEN 'EXISTING'
+WHEN status = 'CHURN' AND paid IS NOT NULL THEN 'RESURRECT'
+WHEN status is NULL THEN 'NEW'
+END AS new_status
+
+from payment_status
+order by 1;
+
+
+######## Problem2 -----> 3-Topping Pizzas [McKinsey SQL Interview Question] ###################################
+link -----> https://datalemur.com/questions/pizzas-topping-cost
+
+Q. You’re a consultant for a major pizza chain that will be running a promotion where all 3-topping pizzas will be sold for a fixed price, and are trying to understand the costs involved.
+Given a list of pizza toppings, consider all the possible 3-topping pizzas, and print out the total cost of those 3 toppings. Sort the results with the highest total cost on the top followed by pizza toppings in ascending order.
+Break ties by listing the ingredients in alphabetical order, starting from the first ingredient, followed by the second and third.
+
+
+
+
+
+
