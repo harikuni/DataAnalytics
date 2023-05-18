@@ -1,0 +1,75 @@
+######## Problem1 ----->  Patient Support Analysis (Part 3) [UnitedHealth SQL Interview Question] ###################################
+link -----> https://datalemur.com/questions/patient-call-history
+
+Q. UnitedHealth Group has a program called Advocate4Me, which allows members to call an advocate and receive support for their health care needs – whether that's behavioural, clinical, well-being, health care financing, benefits, claims or pharmacy help.
+Write a query to get the patients who made a call within 7 days of their previous call. If a patient called more than twice in a span of 7 days, count them as once.
+
+WITH call_history as (
+SELECT policy_holder_id,
+call_received,
+LAG(call_received) over (
+PARTITION BY policy_holder_id
+ORDER BY call_received
+) as previous_call,
+
+EXTRACT(EPOCH FROM 
+call_received - LAG(call_received) over (
+PARTITION BY policy_holder_id
+ORDER BY call_received)
+) / (24*60*60) as day_difference
+
+from callers 
+)
+
+
+select COUNT(DISTINCT policy_holder_id) AS patient_count
+from call_history
+where day_difference <= 7; 
+
+
+
+
+
+######## Problem2 -----> Patient Support Analysis (Part 4) [UnitedHealth SQL Interview Question] ###################################
+link -----> https://datalemur.com/questions/long-calls-growth
+
+
+Q UnitedHealth Group has a program called Advocate4Me, which allows members to call an advocate and receive support for their health care needs – whether that's behavioural, clinical, well-being, health care financing, benefits, claims or pharmacy help.
+A long-call is categorised as any call that lasts more than 5 minutes (300 seconds). What's the month-over-month growth of long-calls?
+
+
+with calls as (
+SELECT 
+EXTRACT(YEAR FROM call_received) AS yr,
+EXTRACT(MONTH FROM call_received) AS mth,
+COUNT(case_id) AS curr_mth_call,
+LAG(COUNT(case_id)) OVER(
+ORDER BY EXTRACT(MONTH FROM call_received)) AS prev_mth_call
+
+from callers 
+where call_duration_secs >300
+GROUP BY 1,2
+)
+
+select yr,mth,
+ROUND(100.0* (curr_mth_call - prev_mth_call)/prev_mth_call,1) as growth_pct
+from calls
+order by mth
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
