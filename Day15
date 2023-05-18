@@ -21,3 +21,45 @@ from transactions
 select COUNT(transaction_id) as payment_count
 FROM payments
 where minute_difference <=10;
+
+
+
+
+######## Problem2 ----->  Managers with at Least 5 Direct Reports ###################################
+link -----> https://leetcode.com/problems/managers-with-at-least-5-direct-reports/?envType=study-plan-v2&id=top-sql-50
+
+
+Q. Write an SQL query to report the managers with at least five direct reports.
+
+select name from Employee 
+where id in 
+(
+select managerId from Employee 
+group by managerId 
+having count(*)>=5
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
