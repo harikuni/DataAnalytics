@@ -1,0 +1,38 @@
+######## Problem1 -----> Product Sales Analysis III ###################################
+link -----> https://leetcode.com/problems/product-sales-analysis-iii/?envType=study-plan-v2&id=top-sql-50
+
+
+Q. Write an SQL query that selects the product id, year, quantity, and price for the first year of every product sold.
+
+select product_id,
+year as first_year,quantity,price
+from Sales 
+where (product_id,year) in 
+(select product_id,min(year) as year from sales group by 1)
+
+
+######## Problem2 ----->  Customers Who Bought All Products ###################################
+link -----> https://leetcode.com/problems/customers-who-bought-all-products/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query to report the customer ids from the Customer table that bought all the products in the Product table.
+
+select customer_id 
+from customer
+group by 1
+having sum(distinct product_key) = (select sum(product_key) from product)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
