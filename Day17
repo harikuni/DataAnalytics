@@ -1,0 +1,76 @@
+######## Problem1 -----> Confirmation Rate ###################################
+link -----> https://leetcode.com/problems/confirmation-rate/description/
+
+Q.  Write an SQL query to find the confirmation rate of each user. 
+
+WITH CTE AS
+(
+SELECT 
+    user_id,
+    SUM(CASE WHEN action = 'confirmed' THEN 1 ELSE 0 END) AS totalConfirmed,
+    COUNT(action) AS totalAction
+FROM Confirmations
+GROUP BY user_id
+)
+
+SELECT
+    S.user_id,
+    ROUND(IFNULL(SUM(totalConfirmed/totalAction),0),2) AS confirmation_rate
+FROM Signups S
+LEFT JOIN CTE C
+ON S.user_id = C.user_id
+GROUP BY 1
+
+
+
+######## Problem2 -----> Not Boring Movies ###################################
+link -----> https://leetcode.com/problems/not-boring-movies/?envType=study-plan-v2&id=top-sql-50
+
+
+Q. Write an SQL query to report the movies with an odd-numbered ID and a description that is not "boring".
+Return the result table ordered by rating in descending order.
+
+select * from Cinema 
+where id%2 !=0 and description not in ('boring')
+order by rating desc
+
+
+
+######## Problem3 ----->  Monthly Transactions I ###################################
+link ----->  https://leetcode.com/problems/monthly-transactions-i/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query to find for each month and country, the number of transactions and their total amount, the number of approved transactions and their total amount.
+
+
+select LEFT(trans_date,7) as month,
+country,
+count(id) as trans_count,
+sum(state = 'approved') as approved_count,
+sum(amount) as trans_total_amount,
+sum(case when state = 'approved' then amount else 0 end) as approved_total_amount
+from Transactions
+group by 1,2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
