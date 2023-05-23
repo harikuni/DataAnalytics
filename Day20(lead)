@@ -15,9 +15,15 @@ select distinct num as ConsecutiveNums from similar
 where num = num1 and num = num2
 
 
-######## Problem2 ----->  Product Price at a Given Date ###################################
-link -----> https://leetcode.com/problems/product-price-at-a-given-date/?envType=study-plan-v2&id=top-sql-50
+######## Problem2 ----->  Replace Employee ID With The Unique Identifier ###################################
+link -----> https://leetcode.com/problems/replace-employee-id-with-the-unique-identifier/?envType=study-plan-v2&id=top-sql-50
 
 
-Q. Write an SQL query to find the prices of all products on 2019-08-16. Assume the price of all products before any change is 10.
+Q. Write an SQL query to show the unique ID of each user, If a user does not have a unique ID replace just show null.
+
+
+select e.name,em.unique_id
+from employees e
+left join employeeUNI em on e.id = em.id
+
 
