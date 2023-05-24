@@ -1,0 +1,49 @@
+######## Problem1 ----->  Employee Bonus ###################################
+link -----> https://leetcode.com/problems/employee-bonus/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query to report the name and bonus amount of each employee with a bonus less than 1000.
+Return the result table in any order.
+
+select e.name,b.bonus from employee e
+left join bonus b on e.empId = b.empId
+where b.bonus is NULL or b.bonus <1000
+
+
+
+######## Problem2 ----->  Average Selling Price ###################################
+link -----> https://leetcode.com/problems/average-selling-price/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query to find the average selling price for each product. average_price should be rounded to 2 decimal places.
+
+select distinct p.product_id,round(sum(p.price*u.units)/ sum(u.units),2) as average_price
+from prices p
+join unitssold u on p.product_id = u.product_id and 
+u.purchase_date between p.start_date and p.end_date
+group by 1
+
+
+
+######## Problem3 -----> Project Employees I ###################################
+link -----> https://leetcode.com/problems/project-employees-i/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query that reports the average experience years of all the employees for each project, rounded to 2 digits.
+
+
+select distinct p.project_id,
+round(sum(e.experience_years)/count(p.project_id),2) as average_years 
+from project p join employee e on p.employee_id = e.employee_id
+group by 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
