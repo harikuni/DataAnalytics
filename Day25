@@ -1,0 +1,29 @@
+######## Problem1 ----->   Queries Quality and Percentage ###################################
+link -----> https://leetcode.com/problems/queries-quality-and-percentage/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query to find each query_name, the quality and poor_query_percentage.
+Both quality and poor_query_percentage should be rounded to 2 decimal places.
+
+select query_name, 
+round(avg(rating/position),2) as quality,
+round(100.0* ((select count(rating) from queries where rating <3)/(select count(rating) from queries )),2) as poor_query_percentage
+
+from queries 
+group by 1
+
+
+######## Problem2 ----->   User Activity for the Past 30 Days I  ###################################
+link -----> https://leetcode.com/problems/user-activity-for-the-past-30-days-i/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query to find the daily active user count for a period of 30 days ending 2019-07-27 inclusively. A user was active on someday if they made at least 
+one activity on that day.
+
+select activity_date as day,count(distinct user_id) as active_users
+from activity
+where activity_date >'2019-06-27' and  activity_date <='2019-07-27'
+group by 1
+
+
+
+
+
