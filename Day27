@@ -1,0 +1,72 @@
+######## Problem1 ----->  Triangle Judgement ###################################
+link -----> https://leetcode.com/problems/triangle-judgement/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query to report for every three line segments whether they can form a triangle.
+
+select x,y,z,
+case when x+y >z and x+z >y and y+z >x then 'Yes' else 'No' end as triangle
+from triangle
+
+
+######## Problem1 -----> Employees Whose Manager Left the Company  ###################################
+link -----> https://leetcode.com/problems/employees-whose-manager-left-the-company/?envType=study-plan-v2&id=top-sql-50
+
+
+Q. Write an SQL query to report the IDs of the employees whose salary is strictly less than $30000 and whose manager left the company.
+When a manager leaves the company, their information is deleted from the Employees table, but the reports still have their manager_id
+set to the manager that left.
+
+
+Solution 1 ----> using self join
+
+select e1.employee_id from employees as e1
+left join employees as e2 on e1.manager_id = e2.employee_id
+
+where e1.manager_id is not Null 
+and e1.salary < 30000
+and e2.employee_id is NULL
+order by 1
+
+
+
+Solution 2 ----> using subquery
+
+SELECT employee_id FROM Employees
+WHERE manager_id NOT IN (SELECT employee_id FROM Employees)
+AND salary < 30000
+ORDER BY employee_id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
