@@ -1,0 +1,95 @@
+######## Problem1 ----->  Last Person to Fit in the Bus ###################################
+link -----> https://leetcode.com/problems/last-person-to-fit-in-the-bus/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query to find the person_name of the last person that can fit on the bus without exceeding the weight limit.
+
+select person_name from
+(select person_name, weight, turn, sum(weight) over(order by turn) as cum_sum
+from queue) x
+where cum_sum <= 1000
+order by turn desc limit 1;
+
+
+######## Problem2 -----> Count Salary Categories ###################################
+link -----> https://leetcode.com/problems/count-salary-categories/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query to report the number of bank accounts of each salary category. The salary categories are:
+
+"Low Salary": All the salaries strictly less than $20000.
+"Average Salary": All the salaries in the inclusive range [$20000, $50000].
+"High Salary": All the salaries strictly greater than $50000.
+
+
+
+select 'Low Salary' as category , 
+count(account_id) as accounts_count from accounts
+where account_id in (select account_id from accounts where income <20000 )
+union
+select 'Average Salary' as category , 
+count(account_id) as accounts_count from accounts
+where account_id in (select account_id from accounts where income >=20000 and  income <=50000 )
+union
+select 'High Salary' as category , 
+count(account_id) as accounts_count from accounts
+where account_id in (select account_id from accounts where income >50000 )
+
+
+
+
+
+
+######## Problem3 -----> Exchange Seats ###################################
+link -----> https://leetcode.com/problems/exchange-seats/?envType=study-plan-v2&id=top-sql-50
+
+
+Q. Write an SQL query to swap the seat id of every two consecutive students. If the numberof students is odd, 
+the id of the last student is not swapped.
+
+
+
+select
+case 
+when id % 2 != 0 and id = (select count(*) from Seat) then id
+when id % 2 != 0 then id + 1 else id - 1 end as id, 
+student from Seat 
+order by id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
