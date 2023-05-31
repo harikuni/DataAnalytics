@@ -1,0 +1,53 @@
+######## Problem1 ----->  Movie Rating ###################################
+link -----> https://leetcode.com/problems/movie-rating/?envType=study-plan-v2&id=top-sql-50
+
+Q. Find the name of the user who has rated the greatest number of movies. In case of a tie, return the lexicographically smaller user name.
+Find the movie name with the highest average rating in February 2020. In case of a tie, return the lexicographically smaller movie name.
+
+(select name as results 
+from users u ,MovieRating mr 
+where u.user_id = mr.user_id
+group by u.user_id
+order by count(mr.user_id) desc ,name asc limit 1)
+union all
+(select title as results from movies m,MovieRating mr 
+where m.movie_id = mr.movie_id  and created_at between '2020-02-01' and '2020-02-29'
+group by m.movie_id
+order by avg(rating) desc,title asc limit 1 )
+
+
+
+######## Problem2 ----->   Restaurant Growth ###################################
+link -----> https://leetcode.com/problems/restaurant-growth/?envType=study-plan-v2&id=top-sql-50
+
+Q. Write an SQL query to compute the moving average of how much the customer paid in a seven days window (i.e., current day + 6 days before). 
+average_amount should be rounded to two decimal places.
+
+
+with cte as (
+SELECT 
+visited_on, COUNT(visited_on) OVER W as day_cnt,
+SUM(SUM(amount)) OVER W AS amount, 
+ROUND(AVG(sum(amount)) OVER W,2) AS average_amount
+FROM customer
+GROUP BY 1
+WINDOW W AS (ORDER BY visited_on ROWS BETWEEN 6 PRECEDING and CURRENT ROW)
+)
+SELECT visited_on, amount, average_amount from cte
+WHERE day_cnt = 7
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
